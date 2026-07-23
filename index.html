@@ -65,12 +65,39 @@
 
                     <!-- Input Fields Grid -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <!-- Harga Modal / Cost Price -->
+                        <!-- Harga Modal 1 -->
                         <div>
-                            <label class="block text-xs font-medium text-slate-300 mb-1.5">Harga Modal Satuan (HPP)</label>
+                            <label class="block text-xs font-medium text-slate-300 mb-1.5">Harga Modal 1 (HPP)</label>
                             <div class="relative rounded-xl shadow-sm">
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 text-xs font-semibold">Rp</div>
-                                <input type="number" id="costPrice" value="50000" min="0" step="500" oninput="calculate()" class="block w-full pl-10 pr-4 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-slate-100 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                                <input type="number" id="costPrice1" value="0" min="0" step="500" oninput="calculate()" class="block w-full pl-10 pr-4 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-slate-100 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                            </div>
+                        </div>
+
+                        <!-- Harga Modal 2 -->
+                        <div>
+                            <label class="block text-xs font-medium text-slate-300 mb-1.5">Harga Modal 2 (HPP)</label>
+                            <div class="relative rounded-xl shadow-sm">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 text-xs font-semibold">Rp</div>
+                                <input type="number" id="costPrice2" value="0" min="0" step="500" oninput="calculate()" class="block w-full pl-10 pr-4 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-slate-100 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                            </div>
+                        </div>
+
+                        <!-- Harga Modal 3 -->
+                        <div>
+                            <label class="block text-xs font-medium text-slate-300 mb-1.5">Harga Modal 3 (HPP)</label>
+                            <div class="relative rounded-xl shadow-sm">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 text-xs font-semibold">Rp</div>
+                                <input type="number" id="costPrice3" value="0" min="0" step="500" oninput="calculate()" class="block w-full pl-10 pr-4 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-slate-100 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                            </div>
+                        </div>
+
+                        <!-- Harga Modal 4 -->
+                        <div>
+                            <label class="block text-xs font-medium text-slate-300 mb-1.5">Harga Modal 4 (HPP)</label>
+                            <div class="relative rounded-xl shadow-sm">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 text-xs font-semibold">Rp</div>
+                                <input type="number" id="costPrice4" value="0" min="0" step="500" oninput="calculate()" class="block w-full pl-10 pr-4 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-slate-100 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
                             </div>
                         </div>
 
@@ -125,6 +152,12 @@
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 text-xs font-semibold">Rp</div>
                                 <input type="number" id="commission" value="2000" min="0" step="500" oninput="calculate()" class="block w-full pl-10 pr-4 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-slate-100 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
                             </div>
+                        </div>
+
+                        <!-- Combined Cost Info Badge -->
+                        <div class="sm:col-span-2 bg-slate-900/40 p-3 rounded-xl border border-slate-700/40 flex justify-between items-center text-xs">
+                            <span class="text-slate-400">Akumulasi Harga Modal Satuan (1+2+3+4):</span>
+                            <span id="resCombinedCost" class="font-bold text-indigo-400 text-sm">Rp 0</span>
                         </div>
                     </div>
 
@@ -269,8 +302,15 @@
         }
 
         function calculate() {
+            const cost1 = parseFloat(document.getElementById('costPrice1').value) || 0;
+            const cost2 = parseFloat(document.getElementById('costPrice2').value) || 0;
+            const cost3 = parseFloat(document.getElementById('costPrice3').value) || 0;
+            const cost4 = parseFloat(document.getElementById('costPrice4').value) || 0;
+            
+            const costPrice = cost1 + cost2 + cost3 + cost4;
+            document.getElementById('resCombinedCost').innerText = formatIDR(costPrice);
+
             // Get input values
-            const costPrice = parseFloat(document.getElementById('costPrice').value) || 0;
             const quantity = parseInt(document.getElementById('quantity').value) || 1;
             const dynamicVal = parseFloat(document.getElementById('dynamicValue').value) || 0;
             const discountPercent = parseFloat(document.getElementById('discountPercent').value) || 0;
@@ -339,7 +379,10 @@
         }
 
         function resetAll() {
-            document.getElementById('costPrice').value = 50000;
+            document.getElementById('costPrice1').value = 0;
+            document.getElementById('costPrice2').value = 0;
+            document.getElementById('costPrice3').value = 0;
+            document.getElementById('costPrice4').value = 0;
             document.getElementById('quantity').value = 10;
             document.getElementById('dynamicValue').value = 30;
             document.getElementById('discountPercent').value = 0;
@@ -353,7 +396,12 @@
         }
 
         function saveToHistory() {
-            const costPrice = document.getElementById('costPrice').value;
+            const cost1 = parseFloat(document.getElementById('costPrice1').value) || 0;
+            const cost2 = parseFloat(document.getElementById('costPrice2').value) || 0;
+            const cost3 = parseFloat(document.getElementById('costPrice3').value) || 0;
+            const cost4 = parseFloat(document.getElementById('costPrice4').value) || 0;
+            const totalCostPrice = cost1 + cost2 + cost3 + cost4;
+
             const quantity = document.getElementById('quantity').value;
             const netProfitText = document.getElementById('resNetProfit').innerText;
             const sellingPriceText = document.getElementById('resSellingPrice').innerText;
@@ -361,7 +409,7 @@
             const record = {
                 date: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
                 qty: quantity,
-                hpp: formatIDR(costPrice),
+                hpp: formatIDR(totalCostPrice),
                 sell: sellingPriceText,
                 profit: netProfitText
             };
